@@ -107,8 +107,8 @@ class Params:
     parser = None
     def __init__(self):
         self.parser = argparse.ArgumentParser()
-        subparsers = self.parser.add_subparsers(dest="command",required=True)
-
+        subparsers = self.parser.add_subparsers(dest="command")
+        subparsers.required = True
         comm_read = subparsers.add_parser("read",help="Read mails")
         comm_read.add_argument("--address","-a", required=False,
             help="Select address from it's index or name")

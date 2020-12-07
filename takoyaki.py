@@ -104,7 +104,9 @@ class Takoyaki:
         selected_mailbox = MailTools.find_mailbox(args.address,self.box)
         print(f"Waiting new mails for {selected_mailbox.address}")
         mails=selected_mailbox.get_mail_list()
-        print(f"Last mail was: {mails[0]}\nPress Ctrl+C to Abort.",end="\r")
+        if mails:
+            print(f"Last mail was: {mails[0]}")
+        print("Press Ctrl+C to Abort.",end="\r")
         count = cur_count = len(mails)
         while count == cur_count:
             try:
