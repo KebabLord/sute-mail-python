@@ -138,10 +138,12 @@ class Params:
             help="Select address from it's index or name")
 
         custom_help = cleandoc(
-            """Takoyaki 1.0, an interactive burner mail creator and controller.
-            Usage: kuku [SUBCOMMAND] [OPTION]...
+            """Takoyaki is an interactive burner mail creator and controller.
+            Usage:
+              takoyaki [COMMAND] [ARGS...]
+              takoyaki -h | --help
 
-            subcommands:
+            Commands:
               create [-h]               Create new random mail address
               read   [-ha]              Read mails from specified address
               wait   [-ha]              Wait for new mails on specified address
@@ -149,7 +151,7 @@ class Params:
               list   [-h]               List current mail addresses
               gen    [-hwpusa]          Generate registration details
 
-            parameters:
+            Options:
               -h, --help                Show extended information about the subcommand
               -a, --address <ADDRESS>   Specify the mail address
               -p, --password            Generate password
