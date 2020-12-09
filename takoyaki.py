@@ -89,12 +89,15 @@ class Takoyaki:
         mails = selected_mailbox.get_mail_list()
         mail_list=[{a:b for a,b in (("name",i.title),("value",i))} for i in mails]
         if mail_list:
-            selected_mail = prompt([{
-                'type': 'list',
-                'name': 'mail',
-                'message': 'Select mail',
-                'choices':  mail_list
-                }])["mail"]
+            if args.last:
+                selected_mail=mails[0]
+            else:
+                selected_mail = prompt([{
+                    'type': 'list',
+                    'name': 'mail',
+                    'message': 'Select mail',
+                    'choices':  mail_list
+                    }])["mail"]
             MailTools.read_mail(selected_mail)
         else:
             print("No mails.")
@@ -128,6 +131,7 @@ if __name__ == "__main__":
     yaki = Takoyaki()
 
     if args.command in ["del","read","create","list","wait"]:
+    # if one of the commands above connect automatically
         yaki.connect()
 
     if args.command == "create":
