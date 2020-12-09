@@ -112,6 +112,8 @@ class Params:
         comm_read = subparsers.add_parser("read",help="Read mails")
         comm_read.add_argument("--address","-a", required=False,
             help="Select address from it's index or name")
+        comm_read.add_argument("--last","-l", required=False,
+            help="Select latest mail",action="store_true")
 
         comm_del = subparsers.add_parser("del",help="Delete a mailbox")
         comm_del.add_argument("--address","-a",  required=True,
@@ -145,7 +147,7 @@ class Params:
 
             Commands:
               create [-h]               Create new random mail address
-              read   [-ha]              Read mails from specified address
+              read   [-hal]             Read mails from specified address
               wait   [-ha]              Wait for new mails on specified address
               del    [-ha]              Delete specified mail address
               list   [-h]               List current mail addresses
@@ -154,6 +156,7 @@ class Params:
             Options:
               -h, --help                Show extended information about the subcommand
               -a, --address <ADDRESS>   Specify the mail address
+              -l, --last                Select latest mail
               -p, --password            Generate password
               -u, --uname               Generate username
               -w, --Wait                Start listening new mails after generate
