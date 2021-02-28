@@ -2,13 +2,16 @@
 """Takoyaki is a script to create instant burner accounts."""
 from os.path import exists
 import sys
-from PyInquirer import prompt
+from questionary import select
 from requests.exceptions import ConnectionError as rConnectionError, Timeout, ConnectTimeout
+from colorama import Style
 
-from lib.tools import Params,Colors,MailTools,PrtTools
+from lib.tools import Params,MailTools,PrtTools
 from lib.sute import Sute
+from lib import style,Files
 
 class Takoyaki:
+    """ Class that contains main functions """
     def __init__(self):
         self.box = None
 
@@ -16,14 +19,14 @@ class Takoyaki:
         """ Creates the mail box object which includes addresses,mails and ids """
         try:
             print("Connecting..",end="\r")
-            if exists(".ses"):
-                with open(".ses") as ses_file:
+            if exists(Files.ses_token):
+                with open(Files.ses_token) as ses_file:
                     ses_id = ses_file.read()
             else:
                 ses_id = None
             sute = Sute(ses_id=ses_id)
             PrtTools.clear_line()
-            with open(".mails","w") as cache:
+            with open(Files.mailboxes,"w") as cache:
                 cache.writelines([mail.address+"\n" for mail in sute.mails])
             #return sute
             self.box=sute
@@ -37,30 +40,31 @@ class Takoyaki:
             print("{}  {}".format(i+1,mail.address))
 
     def create(self):
+        """ Create a new random burner mail """
         new = self.box.create_new_random_address()
         print("created:",new.address)
-        with open(".mails","w") as file:
+        with open(Files.mailboxes,"w") as file:
             file.writelines([mail.address+"\n" for mail in self.box.mails])
 
     def gen(self):
         """
         Generates a random password and a username
-        optionally saves them to .accs file with given tag
+        optionally saves them to 'lib.config.Files.burner_accounts' file with given tag
         """
-        if exists(".mails"):
+        if exists(Files.mailboxes):
             selected_mail=MailTools.find_mailbox(args.address)
         else:
             self.connect()
             selected_mail=MailTools.find_mailbox(args.address,self.box).address
 
-        result=f"{Colors.BOLD}Mail:{Colors.ENDC} {selected_mail} \n"
+        result=f"{Style.BRIGHT}Mail:{Style.RESET_ALL} {selected_mail} \n"
         if args.uname:
-            result+=f"{Colors.BOLD}Nick:{Colors.ENDC} {PrtTools.gen_details(nick=True)} \n"
+            result+=f"{Style.BRIGHT}Nick:{Style.RESET_ALL} {PrtTools.gen_details(nick=True)} \n"
         if args.password:
-            result+=f"{Colors.BOLD}Pass:{Colors.ENDC} {PrtTools.gen_details(password=True)} \n"
+            result+=f"{Style.BRIGHT}Pass:{Style.RESET_ALL} {PrtTools.gen_details(password=True)} \n"
         if args.save:
-            result=f"{Colors.BOLD}=== {args.save.title()} Account ==={Colors.ENDC}\n"+result
-            with open(".accs","a") as file:
+            result=f"{Style.BRIGHT}=== {args.save.title()} Account ==={Style.RESET_ALL}\n"+result
+            with open(Files.burner_accounts,"a") as file:
                 file.write(PrtTools.escape_ansi(result)+"\n")
         print(result)
         if args.wait:
@@ -78,13 +82,13 @@ class Takoyaki:
         if args.address:
             selected_mailbox = MailTools.find_mailbox(args.address,self.box)
         else:
-            selected_mailbox = prompt([{
-                'type': 'list',
-                'name': 'mailbox',
-                'message': 'Select mailbox',
-                'choices': [{a:b for a,b in (("name",i.address),("value",i))}
-                            for i in self.box.mails]
-            }])["mailbox"]
+            selected_mailbox = select(
+                "Select mailbox",
+                choices=[{a:b for a,b in (("name",i.address),("value",i))}
+                              for i in self.box.mails],
+                style=style,
+                instruction=" "
+            ).ask()
 
         mails = selected_mailbox.get_mail_list()
         mail_list=[{a:b for a,b in (("name",i.title),("value",i))} for i in mails]
@@ -92,12 +96,12 @@ class Takoyaki:
             if args.last:
                 selected_mail=mails[0]
             else:
-                selected_mail = prompt([{
-                    'type': 'list',
-                    'name': 'mail',
-                    'message': 'Select mail',
-                    'choices':  mail_list
-                    }])["mail"]
+                selected_mail = select(
+                    "Select mail",
+                    choices=mail_list,
+                    style=style,
+                    instruction=" "
+                ).ask()
             MailTools.read_mail(selected_mail)
         else:
             print("No mails.")
@@ -131,7 +135,7 @@ if __name__ == "__main__":
     yaki = Takoyaki()
 
     if args.command in ["del","read","create","list","wait"]:
-    # if one of the commands above connect automatically
+    # if one of the commands above, connect automatically
         yaki.connect()
 
     if args.command == "create":

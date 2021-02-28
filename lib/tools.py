@@ -9,18 +9,9 @@ import argparse
 import requests
 from requests.exceptions import ConnectionError as rConnectionError, Timeout, ConnectTimeout
 from bs4 import BeautifulSoup as bs4
+from colorama import Fore,Style
 
-
-class Colors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+from .config import Files
 
 class MailTools:
     @staticmethod
@@ -29,8 +20,8 @@ class MailTools:
         Parse mail html.
         First gets the solid text, then prints the buttons with links and titles.
         """
-        print(f"{Colors.BOLD}Title:{Colors.ENDC}",mail.title)
-        print(f"{Colors.BOLD}From:{Colors.ENDC}",mail.sender)
+        print(f"{Style.BRIGHT}Title:{Style.RESET_ALL}",mail.title)
+        print(f"{Style.BRIGHT}From:{Style.RESET_ALL}",mail.sender)
         soup = bs4(mail.text,"html.parser")
         raw = soup.get_text()
         text = '\n'.join([x for x in raw.splitlines() if x.strip()])
@@ -40,7 +31,7 @@ class MailTools:
         # Get buttons and links
         linx = soup.findAll('a', attrs={'href': re.compile("^http[s,]://")})
         for i in linx:
-            prefix = (f"{Colors.BOLD}{Colors.OKGREEN}({i.getText().strip()})↴{Colors.ENDC}\n","")
+            prefix = (f"{Style.BRIGHT}{Fore.GREEN}({i.getText().strip()})↴{Style.RESET_ALL}\n","")
             prefix = prefix[ i.getText() == '' ]
             print(prefix+PrtTools.decrypt_url(i.get("href")))
 
@@ -60,7 +51,7 @@ class MailTools:
                     return box.mails[int(val)-1]
                 return [i for i in box.mails if val in i.address][0]
             #Use Cache instead if box is not specified.
-            with open(".mails","r") as file:
+            with open(Files.mailboxes,"r") as file:
                 mails = file.read().strip().split("\n")
             if val.isdigit():
                 return mails[int(val)-1]
