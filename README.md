@@ -2,8 +2,13 @@
   <img src="https://u.teknik.io/00UzK.svg">
 </p>
 
+# Takoyaki [![GitHub release (latest by date)](https://img.shields.io/github/v/release/kebablord/takoyaki?style=flat-square)](https://github.com/kebablord/takoyaki/releases/latest)  [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kebablord/takoyaki/Check%20errors%20and%20lint?style=flat-square)](https://github.com/KebabLord/takoyaki/actions) ![Pypi version](https://img.shields.io/pypi/v/takoyaki?style=flat-square)[https://pypi.org/project/takoyaki/]
 Takoyaki is a simple tool to create random/burner instant mails and generate registration credentials. It's simply cli version of m.kuku.lu service and a cli frontend to sute-mail-python module.
 
+### Installation & Usage
+You can simply install it from pypi
+```pip install takoyaki```
+You can also download the prebuilt binaries from [releases](https://github.com/KebabLord/takoyaki/releases) or run the script directly from `takoyaki/cli/tako.py` after installing dependencies with `pip3 install -r requirements.txt`.
 ### Usage
 ```λ ./takoyaki.py -h
 Takoyaki is an interactive burner mail creator and controller.

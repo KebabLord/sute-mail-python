@@ -1,14 +1,13 @@
-#!/usr/bin/env python3
-"""Takoyaki is a script to create instant burner accounts."""
+"""Home of main class."""
 from os.path import exists
 import sys
 from questionary import select
 from requests.exceptions import ConnectionError as rConnectionError, Timeout, ConnectTimeout
 from colorama import Style
 
-from lib.tools import Params,MailTools,PrtTools
-from lib.sute import Sute
-from lib import style,Files
+from .tools import Params,MailTools,PrtTools
+from .sute import Sute
+from .config import style,Files
 
 class Takoyaki:
     """ Class that contains main functions """
@@ -127,31 +126,3 @@ class Takoyaki:
                 pass
         PrtTools.clear_line()
         MailTools.read_mail(mails[0])
-
-
-if __name__ == "__main__":
-    params = Params()
-    args = params.parser.parse_args()
-    yaki = Takoyaki()
-
-    if args.command in ["del","read","create","list","wait"]:
-    # if one of the commands above, connect automatically
-        yaki.connect()
-
-    if args.command == "create":
-        yaki.create()
-
-    elif args.command == "list":
-        yaki.list()
-
-    elif args.command == "gen":
-        yaki.gen()
-
-    elif args.command == "del":
-        yaki.delete()
-
-    elif args.command == "read":
-        yaki.read()
-
-    elif args.command == "wait":
-        yaki.wait()
