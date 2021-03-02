@@ -4,8 +4,9 @@ from takoyaki import Takoyaki
 
 def main():
     yaki = Takoyaki()
+    args = yaki.args
 
-    if yaki.args.command in ["del","read","create","list","wait"]:
+    if args.command in ["del","read","create","list","wait"]:
     # if one of the commands above, connect automatically
         yaki.connect()
 

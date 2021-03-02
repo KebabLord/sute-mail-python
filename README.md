@@ -8,9 +8,9 @@ Takoyaki is a simple tool to create random/burner instant mails and generate reg
 ### Installation & Usage
 You can simply install it from pypi
 ```pip install takoyaki```
-You can also download the prebuilt binaries from [releases](https://github.com/KebabLord/takoyaki/releases) or run the script directly from `takoyaki/cli/tako.py` after installing dependencies with `pip3 install -r requirements.txt`.
+You can also download the prebuilt binaries from [releases](https://github.com/KebabLord/takoyaki/releases) or run the script directly from `tako` symlink after installing dependencies with `pip3 install -r requirements.txt`.
 ### Usage
-```λ ./takoyaki.py -h
+```λ tako.py -h
 Takoyaki is an interactive burner mail creator and controller.
 Usage:
   takoyaki [COMMAND] [ARGS...]
@@ -36,28 +36,28 @@ Options:
 ### Examples:
 ```
 # Create a new random instant mail address
-$ ./takoyaki create
+$ tako create
 created: penanegya@mirai.re
 
 # List existing addresses
-$ ./takoyaki list
+$ tako list
 1  misukedo@via.tokyo.jp
 2  kyakidokya@eay.jp
 3  penanegya@mirai.re
 
 # Let's read mails on the kyakidokya@eay.jp
-./takoyaki read -a kyaki
+tako read -a kyaki
 > No mails.
 # or you can also specify index of address
-./takoyaki read -a 2
+tako read -a 2
 > No mails.
 
 # Let's create a burner account for a gaming site,
 # generate a random password and a username,
 # save the credentials we generated to .accs file and wait for the verification mail.
-./takoyaki gen -a1 -puws "some name"
+tako gen -a1 -puws "some name"
 or the long version;
-./takoyaki gen --address 1 --uname --password --wait --save="some name"
+tako gen --address 1 --uname --password --wait --save="some name"
 === Some Name Account ===
 Mail: misukedo@via.tokyo.jp
 Nick: jturlj74 

@@ -1,10 +1,23 @@
+from os import path,name,mkdir
 from questionary import Style as PromptStyle
+
+def get_base():
+    """ Return software's basedirectory to log data"""
+    homedir=path.expanduser('~')
+    if name=="nt":
+        base=path.join(homedir,"Takoyaki")
+    else:
+        base=path.join(homedir,".config","takoyaki")
+    if not path.isdir(base):
+        mkdir(base)
+    return base
 
 class Files:
     """ Path to files """
-    mailboxes=".mails"
-    ses_token=".ses"
-    burner_accounts=".accs"
+    base=get_base()
+    mailboxes=path.join(base,"mails")
+    ses_token=path.join(base,"token")
+    burner_accounts=path.join(base,"accounts")
 
 style = PromptStyle([
     ('qmark', 'fg:#5F819D bold'),
