@@ -11,7 +11,7 @@ from requests.exceptions import ConnectionError as rConnectionError, Timeout, Co
 from bs4 import BeautifulSoup as bs4
 from colorama import Fore,Style
 
-from .config import Files
+from .sute.config import Files
 
 class MailTools:
     @staticmethod

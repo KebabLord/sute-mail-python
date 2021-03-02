@@ -7,7 +7,7 @@ from colorama import Style
 
 from .tools import Params,MailTools,PrtTools
 from .sute import Sute
-from .config import style,Files
+from .sute.config import style,Files
 
 class Takoyaki:
     """ Class that contains main functions """

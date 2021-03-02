@@ -3,7 +3,7 @@ from typing import Optional
 import requests
 from requests.exceptions import ConnectTimeout, ReadTimeout
 
-from .config import Config
+from .config import Config,Files
 from .exception import ConnectionTimeoutError, ReadTimeoutError
 
 
@@ -31,7 +31,7 @@ class Client:
         self.init_connection()
 
     def save_session_id(self) -> None:
-        with open(".ses", "wt") as ses_file:
+        with open(Files.ses_token, "wt") as ses_file:
             ses_file.write(self.get_session_id())
 
     def get_request(
