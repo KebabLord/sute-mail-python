@@ -13,4 +13,4 @@ jobs:
           pip install --upgrade pyOpenSSL;
           pip install -r requirements.txt;
           pylint -E **/*.py &&
-          pylint takoyaki.py lib/tools.py --fail-under 9;
+          pylint takoyaki --fail-under 8;

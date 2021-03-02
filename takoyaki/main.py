@@ -12,6 +12,8 @@ from .config import style,Files
 class Takoyaki:
     """ Class that contains main functions """
     def __init__(self):
+        params = Params()
+        self.args = params.parser.parse_args()
         self.box = None
 
     def connect(self):
@@ -34,6 +36,7 @@ class Takoyaki:
             sys.exit(1)
 
     def list(self):
+        """ Prints the mailboxes you generated """
         self.box.refresh_address_list()
         for i,mail in enumerate(self.box.mails):
             print("{}  {}".format(i+1,mail.address))
@@ -51,35 +54,36 @@ class Takoyaki:
         optionally saves them to 'lib.config.Files.burner_accounts' file with given tag
         """
         if exists(Files.mailboxes):
-            selected_mail=MailTools.find_mailbox(args.address)
+            selected_mail=MailTools.find_mailbox(self.args.address)
         else:
             self.connect()
-            selected_mail=MailTools.find_mailbox(args.address,self.box).address
+            selected_mail=MailTools.find_mailbox(self.args.address,self.box).address
 
         result=f"{Style.BRIGHT}Mail:{Style.RESET_ALL} {selected_mail} \n"
-        if args.uname:
+        if self.args.uname:
             result+=f"{Style.BRIGHT}Nick:{Style.RESET_ALL} {PrtTools.gen_details(nick=True)} \n"
-        if args.password:
+        if self.args.password:
             result+=f"{Style.BRIGHT}Pass:{Style.RESET_ALL} {PrtTools.gen_details(password=True)} \n"
-        if args.save:
-            result=f"{Style.BRIGHT}=== {args.save.title()} Account ==={Style.RESET_ALL}\n"+result
+        if self.args.save:
+            result=f"{Style.BRIGHT}=== {self.args.save.title()} Account ==={Style.RESET_ALL}\n"+result
             with open(Files.burner_accounts,"a") as file:
                 file.write(PrtTools.escape_ansi(result)+"\n")
         print(result)
-        if args.wait:
+        if self.args.wait:
             self.connect()
             self.wait()
 
     def delete(self):
-        mailbox = MailTools.find_mailbox(args.address,self.box)
+        """ Delete the address specified on commandline arguments """
+        mailbox = MailTools.find_mailbox(self.args.address,self.box)
         status = mailbox.delete_mailbox()
         if status==200:
             print("Success.")
 
     def read(self):
         """ Read mails, prompts interactive cli if target mail box is not specified """
-        if args.address:
-            selected_mailbox = MailTools.find_mailbox(args.address,self.box)
+        if self.args.address:
+            selected_mailbox = MailTools.find_mailbox(self.args.address,self.box)
         else:
             selected_mailbox = select(
                 "Select mailbox",
@@ -92,7 +96,7 @@ class Takoyaki:
         mails = selected_mailbox.get_mail_list()
         mail_list=[{a:b for a,b in (("name",i.title),("value",i))} for i in mails]
         if mail_list:
-            if args.last:
+            if self.args.last:
                 selected_mail=mails[0]
             else:
                 selected_mail = select(
@@ -107,7 +111,7 @@ class Takoyaki:
 
     def wait(self):
         """ Listen for new messages on specified mailbox """
-        selected_mailbox = MailTools.find_mailbox(args.address,self.box)
+        selected_mailbox = MailTools.find_mailbox(self.args.address,self.box)
         print(f"Waiting new mails for {selected_mailbox.address}")
         mails=selected_mailbox.get_mail_list()
         if mails:
